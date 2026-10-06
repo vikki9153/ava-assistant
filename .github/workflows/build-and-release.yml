@@ -43,3 +43,18 @@ jobs:
           asset_path: dist/AvaAssistant.exe
           asset_name: AvaAssistant.exe
           asset_content_type: application/octet-stream
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup -y || echo "Inno Setup install may require admin privileges"
+
+      - name: Build Installer (Inno)
+        run: |
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss || echo "ISCC not found; installer step skipped"
+
+      - name: Upload installer asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: AvaAssistantInstaller.exe
+          asset_name: AvaAssistantInstaller.exe
+          asset_content_type: application/octet-stream
